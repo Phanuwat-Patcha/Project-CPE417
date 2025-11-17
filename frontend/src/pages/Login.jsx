@@ -1,8 +1,10 @@
 import React from "react";
+import SPULogo from "../assets/SPU-LOGOFULL.png"; // ✅ import โลโก้จาก assets
 
 export default function Login() {
   return (
     <div style={styles.container}>
+      <img src={SPULogo} alt="SPU Logo" style={styles.logo} /> {/* ✅ โลโก้ที่มุมซ้าย */}
       <div style={styles.content}>
         <h2 style={styles.university}>มหาวิทยาลัยศรีปทุม<br />SRIPATUM UNIVERSITY</h2>
         <h3 style={styles.title}>Reservation System</h3>
@@ -33,9 +35,18 @@ const styles = {
     backgroundColor: "#ffffff",
     width: "100vw",
     height: "100vh",
+    position: "relative", // ✅ เพื่อให้โลโก้จัดตำแหน่งได้
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+  },
+  logo: {
+    position: "absolute",
+    top: "20px",
+    left: "40px",
+    width: "120px",
+    height: "100px",
+    objectFit: "contain",
   },
   content: {
     textAlign: "center",
@@ -52,7 +63,7 @@ const styles = {
   title: {
     fontSize: "18px",
     marginBottom: "5px",
-    color: "#444",
+    color: "#333",
   },
   welcome: {
     fontSize: "16px",
@@ -77,6 +88,8 @@ const styles = {
     padding: "10px",
     borderRadius: "5px",
     border: "1px solid #ccc",
+    backgroundColor: "rgba(227, 227, 227, 1)",
+    color: "#000",
   },
   button: {
     width: "30%",
