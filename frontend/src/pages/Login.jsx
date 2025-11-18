@@ -1,10 +1,35 @@
-import React from "react";
-import SPULogo from "../assets/SPU-LOGOFULL.png"; // ✅ import โลโก้จาก assets
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import SPULogo from "../assets/SPU-LOGOFULL.png";
 
 export default function Login() {
+  const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = () => {
+    // ตรวจสอบว่า username เป็นตัวเลข 8 หลัก
+    const usernameValid = /^\d{8}$/.test(username);
+    // ตรวจสอบว่า password เป็นตัวเลข 13 หลัก
+    const passwordValid = /^\d{13}$/.test(password);
+
+    if (!usernameValid) {
+      alert("กรุณากรอก Username เป็นตัวเลข 8 หลัก");
+      return;
+    }
+
+    if (!passwordValid) {
+      alert("กรุณากรอก Password เป็นตัวเลข 13 หลัก");
+      return;
+    }
+
+    // ถ้าผ่านเงื่อนไขทั้งหมด → ไปหน้า Home
+    navigate("/home");
+  };
+
   return (
     <div style={styles.container}>
-      <img src={SPULogo} alt="SPU Logo" style={styles.logo} /> {/* ✅ โลโก้ที่มุมซ้าย */}
+      <img src={SPULogo} alt="SPU Logo" style={styles.logo} />
       <div style={styles.content}>
         <h2 style={styles.university}>มหาวิทยาลัยศรีปทุม<br />SRIPATUM UNIVERSITY</h2>
         <h3 style={styles.title}>Reservation System</h3>
@@ -13,15 +38,25 @@ export default function Login() {
         <div style={styles.form}>
           <div style={styles.formGroup}>
             <label style={styles.label}>Username:</label>
-            <input type="text" style={styles.input} />
+            <input
+              type="text"
+              style={styles.input}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
           </div>
 
           <div style={styles.formGroup}>
             <label style={styles.label}>Password:</label>
-            <input type="password" style={styles.input} />
+            <input
+              type="password"
+              style={styles.input}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
 
-          <button style={styles.button}>LOGIN</button>
+          <button style={styles.button} onClick={handleLogin}>LOGIN</button>
         </div>
 
         <p style={styles.warning}>ห้ามเข้าใช้บริการห้อง เกินกว่าจำนวนที่กำหนด</p>
@@ -35,7 +70,7 @@ const styles = {
     backgroundColor: "#ffffff",
     width: "100vw",
     height: "100vh",
-    position: "relative", // ✅ เพื่อให้โลโก้จัดตำแหน่งได้
+    position: "relative",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
