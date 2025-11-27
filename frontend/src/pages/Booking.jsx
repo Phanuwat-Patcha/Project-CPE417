@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 
 export default function Booking() {
   const { state: booking } = useLocation();
   const navigate = useNavigate();
+
+  // state สำหรับเมนูที่ active
+  const [activeMenu, setActiveMenu] = useState("Booking");
 
   const InfoRow = ({ label, value }) => (
     <div style={styles.row}>
@@ -20,17 +23,40 @@ export default function Booking() {
         <h3 style={styles.menuTitle}>เมนู</h3>
         <ul style={styles.menuList}>
           <li>
-            <Link to="/Home" style={styles.menuItem}>
+            <Link 
+              to="/Home" 
+              style={{ 
+                ...styles.menuItem, 
+                color: activeMenu === "Home" ? "#2e7acc" : "#444" 
+              }}
+              onClick={() => setActiveMenu("Home")}
+            >
               จองห้องเรียน
             </Link>
           </li>
           <li>
-            <Link to="/booking" style={styles.menuItem}>
+            <Link 
+              to="/booking" 
+              style={{ 
+                ...styles.menuItem, 
+                color: activeMenu === "Booking" ? "#2e7acc" : "#444" 
+              }}
+              onClick={() => setActiveMenu("Booking")}
+            >
               รายการจองห้อง
             </Link>
           </li>
           <li>
-            <span style={styles.menuItem} onClick={() => navigate("/")}>
+            <span 
+              style={{ 
+                ...styles.menuItem, 
+                color: activeMenu === "Logout" ? "#2e7acc" : "#444" 
+              }} 
+              onClick={() => {
+                navigate("/");
+                setActiveMenu("Logout");
+              }}
+            >
               ออกจากระบบ
             </span>
           </li>
@@ -59,7 +85,6 @@ export default function Booking() {
           )}
         </div>
       </main>
-
     </div>
   );
 }
@@ -95,21 +120,19 @@ const styles = {
   menuItem: {
     display: "block",
     padding: "10px 0",
-    color: "#444",
     textDecoration: "none",
     fontWeight: 500,
     cursor: "pointer",
     transition: "0.2s",
   },
 
-  /* MAIN — วางตำแหน่งให้เริ่มซ้ายบน */
+  /* MAIN */
   main: {
     flex: 1,
     padding: "40px",
     display: "block",
   },
 
-  /* CARD */
   card: {
     width: "100%",
     maxWidth: "650px",

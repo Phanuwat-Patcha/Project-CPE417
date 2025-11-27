@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Home() {
@@ -7,23 +7,18 @@ export default function Home() {
   const [date, setDate] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [profile, setProfile] = useState(null);
+
+  // Mock profile ข้อมูลผู้ใช้
+  const [profile] = useState({
+    name: "ธันษา หมื่นศรี",
+    teacherId: "65018219",
+    faculty: "เทคโนโลยีสารสนเทศ"
+  });
 
   const navigate = useNavigate();
 
-  // โหลดข้อมูลโปรไฟล์อาจารย์
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/teachers/65018219");
-        const data = await res.json();
-        setProfile(data);
-      } catch (error) {
-        console.error("โหลดข้อมูลโปรไฟล์ไม่สำเร็จ:", error);
-      }
-    };
-    fetchProfile();
-  }, []);
+  // state เก็บเมนูที่เลือก
+  const [activeMenu, setActiveMenu] = useState("Home");
 
   const generateRooms = (floorNumber) => {
     if (!floorNumber) return [];
@@ -45,6 +40,7 @@ export default function Home() {
     navigate("/booking", {
       state: { floor, room, date, startTime, endTime },
     });
+    setActiveMenu("Booking"); // เปลี่ยนเมนูเป็นรายการจองห้อง
   };
 
   const handleCancel = () => {
@@ -62,13 +58,40 @@ export default function Home() {
         <h3 style={styles.menuTitle}>เมนู</h3>
         <ul style={styles.menuList}>
           <li>
-            <Link to="/Home" style={styles.menuItem}>จองห้องเรียน</Link>
+            <Link 
+              to="/Home" 
+              style={{ 
+                ...styles.menuItem, 
+                color: activeMenu === "Home" ? "#2e7acc" : "#555" 
+              }}
+              onClick={() => setActiveMenu("Home")}
+            >
+              จองห้องเรียน
+            </Link>
           </li>
           <li>
-            <Link to="/booking" style={styles.menuItem}>รายการจองห้อง</Link>
+            <Link 
+              to="/booking" 
+              style={{ 
+                ...styles.menuItem, 
+                color: activeMenu === "Booking" ? "#2e7acc" : "#555" 
+              }}
+              onClick={() => setActiveMenu("Booking")}
+            >
+              รายการจองห้อง
+            </Link>
           </li>
           <li>
-            <span style={styles.menuItem} onClick={() => navigate("/")}>
+            <span 
+              style={{ 
+                ...styles.menuItem, 
+                color: activeMenu === "Logout" ? "#2e7acc" : "#555" 
+              }} 
+              onClick={() => {
+                navigate("/");
+                setActiveMenu("Logout");
+              }}
+            >
               ออกจากระบบ
             </span>
           </li>
@@ -80,16 +103,9 @@ export default function Home() {
         <h2 style={styles.header}>ระบบจองห้องเรียน</h2>
 
         <div style={styles.profile}>
-          {profile ? (
-            <>
-              <p><strong>ชื่อ:</strong> {profile.name}</p>
-              <p><strong>รหัสอาจารย์:</strong> {profile.teacherId}</p>
-              <p><strong>เลขบัตรประชาชน:</strong> {profile.citizenId}</p>
-              <p><strong>คณะ:</strong> {profile.faculty}</p>
-            </>
-          ) : (
-            <p>กำลังโหลดข้อมูล...</p>
-          )}
+          <p><strong>ชื่อ:</strong> {profile.name}</p>
+          <p><strong>รหัสประจำตัว:</strong> {profile.teacherId}</p>
+          <p><strong>คณะ:</strong> {profile.faculty}</p>
         </div>
 
         <div style={styles.formGrid}>
@@ -157,7 +173,6 @@ const styles = {
   menuItem: {
     display: "block",
     padding: "10px 0",
-    color: "#555",
     textDecoration: "none",
     fontWeight: 500,
     cursor: "pointer",
